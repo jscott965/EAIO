@@ -55,7 +55,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef FOUNDATION_EAFILEBASE_H
     #include <EAIO/EAFileBase.h>
 #endif
-#include <coreallocator/icoreallocator_interface.h>
+#include <EASTL/allocator.h>
 #ifndef EAIO_EASTLCOREALLOCATOR_H
     #include <EAIO/internal/EAIOEASTLCoreAllocator.h>
 #endif
@@ -217,7 +217,7 @@ namespace EA
             /// Initialization of a FileChangeNotification instance must be done separately
             /// from construction, due to the requirements of initialization. See Init for more.
             ///
-            FileChangeNotification(EA::Allocator::ICoreAllocator* pCoreAllocator = NULL);
+            FileChangeNotification(eastl::allocator* pCoreAllocator = NULL);
 
 
             /// ~FileChangeNotification
@@ -403,7 +403,7 @@ namespace EA
             /// This function must be called before this class is used.
             /// If this function is not called then the default global new/delete
             /// allocator will be used.
-            virtual void SetAllocator(EA::Allocator::ICoreAllocator* pCoreAllocator);
+            virtual void SetAllocator(eastl::allocator* pCoreAllocator);
 
 
         protected:
@@ -465,7 +465,7 @@ namespace EA
 
             // Member data
             bool                        mbInitialized;
-            Allocator::ICoreAllocator*  mpCoreAllocator;
+            eastl::allocator*           mpCoreAllocator;
             char16_t                    mDirectoryPath[kMaxDirectoryLength];
             int                         mnChangeTypeFlags;
             int                         mnOptionFlags;

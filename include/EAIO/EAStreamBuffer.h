@@ -47,15 +47,10 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif
 #include <string.h>
 
-
+#include <EASTL/allocator.h>
 
 namespace EA
 {
-    namespace Allocator
-    {
-        class ICoreAllocator;
-    }
-
     namespace IO
     {
         /// class StreamBuffer
@@ -80,7 +75,7 @@ namespace EA
             static const size_type kBufferSizeUseDefault   = (size_type)  -1;   /// This means that the buffer is used with the default size.
             static const size_type kBufferSizeUnspecified  = (size_type)  -2;   /// This means that the user means to leave the given buffer as-is.
 
-            typedef Allocator::ICoreAllocator Allocator;
+            typedef eastl::allocator Allocator;
 
         public:
             StreamBuffer(size_type nReadBufferSize = kBufferSizeUnspecified, 

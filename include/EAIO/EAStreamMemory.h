@@ -77,7 +77,7 @@ namespace EA
         class EAIO_API SharedPointer : public EA::Allocator::EAIOZoneObject
         {
         public:
-            typedef EA::Allocator::ICoreAllocator Allocator;
+            typedef eastl::allocator Allocator;
 
             SharedPointer(void* pData = NULL, bool bFreeData = true, Allocator* pAllocator = NULL);
             SharedPointer(size_type nSize, const char* pName = NULL);
@@ -106,7 +106,7 @@ namespace EA
         class EAIO_API MemoryStream : public IStream
         {
         public:
-            typedef EA::Allocator::ICoreAllocator Allocator;
+            typedef eastl::allocator Allocator;
 
             enum { kTypeMemoryStream = 0x347223d2 };
 

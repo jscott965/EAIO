@@ -45,7 +45,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <EAIO/internal/Config.h>
 #ifndef EA_ALLOCATOR_ICOREALLOCATOR_INTERFACE_H
-    #include <coreallocator/icoreallocator_interface.h>
+    //#include <coreallocator/icoreallocator_interface.h>
 #endif
 #ifndef EASTL_ALLOCATOR_H
     #include <EASTL/allocator.h>
@@ -57,7 +57,7 @@ namespace EA
     namespace IO
     {
         // Forward declarations
-        EAIO_API Allocator::ICoreAllocator* GetAllocator();
+        EAIO_API eastl::allocator* GetAllocator();
     }
 
 
@@ -83,7 +83,7 @@ namespace EA
         {
         public:
             EAIOEASTLCoreAllocator(const char* pName = EASTL_NAME_VAL(EASTL_ALLOCATOR_DEFAULT_NAME));
-            EAIOEASTLCoreAllocator(const char* pName, ICoreAllocator* pAllocator);
+            EAIOEASTLCoreAllocator(const char* pName, eastl::allocator* pAllocator);
             EAIOEASTLCoreAllocator(const EAIOEASTLCoreAllocator& x);
             EAIOEASTLCoreAllocator(const EAIOEASTLCoreAllocator& x, const char* pName);
 
@@ -93,8 +93,8 @@ namespace EA
             void* allocate(size_t n, size_t alignment, size_t offset, int flags = 0);
             void  deallocate(void* p, size_t n);
 
-            ICoreAllocator* get_allocator() const;
-            void            set_allocator(ICoreAllocator* pAllocator);
+            eastl::allocator* get_allocator() const;
+            void              set_allocator(eastl::allocator* pAllocator);
 
             int  get_flags() const;
             void set_flags(int flags);
@@ -106,8 +106,8 @@ namespace EA
             friend bool operator==(const EAIOEASTLCoreAllocator& a, const EAIOEASTLCoreAllocator& b);
             friend bool operator!=(const EAIOEASTLCoreAllocator& a, const EAIOEASTLCoreAllocator& b);
 
-            ICoreAllocator* mpCoreAllocator;
-            int             mnFlags;    // Allocation flags. See ICoreAllocator/AllocFlags.
+            eastl::allocator* mpCoreAllocator;
+            int               mnFlags;    // Allocation flags. See ICoreAllocator/AllocFlags.
 
             #if EASTL_NAME_ENABLED
                 const char* mpName; // Debug name, used to track memory.
@@ -129,7 +129,7 @@ namespace EA
             EAIOPathStringCoreAllocator(const char* pName = EASTL_NAME_VAL(EAIO_ALLOC_PREFIX "PathString"))
               : EAIOEASTLCoreAllocator(pName) { }
 
-            EAIOPathStringCoreAllocator(const char* pName, ICoreAllocator* pAllocator)
+            EAIOPathStringCoreAllocator(const char* pName, eastl::allocator* pAllocator)
               : EAIOEASTLCoreAllocator(pName, pAllocator) { }
 
             EAIOPathStringCoreAllocator(const EAIOEASTLCoreAllocator& x)
@@ -161,15 +161,15 @@ namespace EA
 
         // The default constructor gets the default EAIO allocator.
         inline EAIOEASTLCoreAllocator::EAIOEASTLCoreAllocator(const char* EASTL_NAME(pName))
-          : mpCoreAllocator(EA::IO::GetAllocator()), mnFlags(MEM_TEMP)
+          : mpCoreAllocator(EA::IO::GetAllocator()), mnFlags(eastl::MEM_TEMP)
         {
             #if EASTL_NAME_ENABLED
                 mpName = pName ? pName : EASTL_ALLOCATOR_DEFAULT_NAME;
             #endif
         }
 
-        inline EAIOEASTLCoreAllocator::EAIOEASTLCoreAllocator(const char* EASTL_NAME(pName), ICoreAllocator* pCoreAllocator)
-          : mpCoreAllocator(pCoreAllocator), mnFlags(MEM_TEMP)
+        inline EAIOEASTLCoreAllocator::EAIOEASTLCoreAllocator(const char* EASTL_NAME(pName), eastl::allocator* pCoreAllocator)
+          : mpCoreAllocator(pCoreAllocator), mnFlags(eastl::MEM_TEMP)
         {
             #if EASTL_NAME_ENABLED
                 mpName = pName ? pName : EASTL_ALLOCATOR_DEFAULT_NAME;
@@ -206,7 +206,7 @@ namespace EA
             // It turns out that EASTL itself doesn't use the flags parameter, 
             // whereas the user here might well want to specify a flags 
             // parameter. So we use ours instead of the one passed in.
-            return mpCoreAllocator->Alloc(n, EASTL_NAME_VAL(mpName), (unsigned)mnFlags);
+            return mpCoreAllocator->allocate(n, mnFlags);
         }
 
         inline void* EAIOEASTLCoreAllocator::allocate(size_t n, size_t alignment, size_t offset, int /*flags*/)
@@ -214,20 +214,20 @@ namespace EA
             // It turns out that EASTL itself doesn't use the flags parameter, 
             // whereas the user here might well want to specify a flags 
             // parameter. So we use ours instead of the one passed in.
-            return mpCoreAllocator->Alloc(n, EASTL_NAME_VAL(mpName), (unsigned)mnFlags, (unsigned)alignment, (unsigned)offset);
+            return mpCoreAllocator->allocate(n, alignment, offset, mnFlags);
         }
 
         inline void EAIOEASTLCoreAllocator::deallocate(void* p, size_t n)
         {
-            return mpCoreAllocator->Free(p, n);
+            return mpCoreAllocator->deallocate(p, n);
         }
 
-        inline ICoreAllocator* EAIOEASTLCoreAllocator::get_allocator() const
+        inline eastl::allocator* EAIOEASTLCoreAllocator::get_allocator() const
         {
             return mpCoreAllocator;
         }
 
-        inline void EAIOEASTLCoreAllocator::set_allocator(ICoreAllocator* pAllocator)
+        inline void EAIOEASTLCoreAllocator::set_allocator(eastl::allocator* pAllocator)
         {
             mpCoreAllocator = pAllocator;
         }

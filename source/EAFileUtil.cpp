@@ -687,7 +687,7 @@ EAIO_API bool File::Copy(const char8_t* pPathSource, const char8_t* pPathDestina
 {
     #if defined(EA_PLATFORM_WINDOWS) 
 
-        return ::CopyFileA(pPathSource, pPathDestination, !bOverwriteIfPresent) != 0;
+        return ::CopyFileA(reinterpret_cast<LPCSTR>(pPathSource), reinterpret_cast<LPCSTR>(pPathDestination), !bOverwriteIfPresent) != 0;
 
     #elif defined(EA_PLATFORM_UNIX) 
 
@@ -1332,7 +1332,7 @@ EAIO_API time_t File::GetTime(const char8_t* pPath, FileTimeType timeType)
 
         #if defined(EA_PLATFORM_WINDOWS)
             struct _stat tempStat;
-            const int result = _stat(pPath, &tempStat);
+            const int result = _stat(reinterpret_cast<const char*>(pPath), &tempStat);
         #else
             struct stat tempStat;
             const int result = stat(pPath, &tempStat);
@@ -1462,7 +1462,7 @@ EAIO_API bool File::SetTime(const char8_t* pPath, int nFileTimeTypeFlags, time_t
             timbuf.actime = File::GetTime(pPath, kFileTimeTypeLastAccess);
     
         #if defined(EA_PLATFORM_WINDOWS)
-            return (_utime(pPath, &timbuf) == 0);
+            return (_utime(reinterpret_cast<const char*>(pPath), &timbuf) == 0);
         #else
             return ( utime(pPath, &timbuf) == 0);
         #endif
@@ -2263,7 +2263,7 @@ EAIO_API bool Directory::Exists(const char8_t* pDirectory)
     {
         #if defined(EA_PLATFORM_WINDOWS)
 
-            const DWORD dwAttributes = ::GetFileAttributesA(pDirectory);
+            const DWORD dwAttributes = ::GetFileAttributesA(reinterpret_cast<LPCSTR>(pDirectory));
             return ((dwAttributes != INVALID_FILE_ATTRIBUTES) && ((dwAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0));
 
         #elif defined(EA_PLATFORM_UNIX) 

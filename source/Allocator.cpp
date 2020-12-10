@@ -34,7 +34,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <EAIO/internal/Config.h>
 #include <EAIO/Allocator.h>
-#include <coreallocator/icoreallocator_interface.h>
+#include <EASTL/allocator.h>
 
 
 namespace EA
@@ -44,21 +44,21 @@ namespace IO
 
 
 
-EA::Allocator::ICoreAllocator* gpCoreAllocator = NULL;
+eastl::allocator* gpCoreAllocator = NULL;
 
 
-EAIO_API Allocator::ICoreAllocator* GetAllocator()
+EAIO_API eastl::allocator* GetAllocator()
 {
     #if EAIO_DEFAULT_ALLOCATOR_ENABLED
         if(!gpCoreAllocator)
-            gpCoreAllocator = EA::Allocator::ICoreAllocator::GetDefaultAllocator();
+            gpCoreAllocator = eastl::GetDefaultAllocator();
     #endif
 
     return gpCoreAllocator;
 }
 
 
-EAIO_API void SetAllocator(Allocator::ICoreAllocator* pCoreAllocator)
+EAIO_API void SetAllocator(eastl::allocator* pCoreAllocator)
 {
     gpCoreAllocator = pCoreAllocator;
 }

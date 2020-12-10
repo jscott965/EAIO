@@ -174,14 +174,14 @@ EAIO_API bool FnMatch(const char8_t* EA_RESTRICT pPattern, const char8_t* EA_RES
                 if(c == '\0')
                 {
                     if(fnMatchFlags & kFNMPathname)
-                        return (fnMatchFlags & kFNMLeadingDir) || !strchr(pString, cSeparator) ? true : false;
+                        return (fnMatchFlags & kFNMLeadingDir) || !strchr(reinterpret_cast<const char*>(pString), cSeparator) ? true : false;
                     else
                         return true;
                 }
 
                 else if((c == cSeparator) && (fnMatchFlags & kFNMPathname))
                 {
-                    pString = strchr(pString, cSeparator);
+                    pString = reinterpret_cast<const char8_t*>(strchr(reinterpret_cast<const char*>(pString), cSeparator));
 
                     if(pString == NULL)
                         return false;

@@ -48,7 +48,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <EASTL/core_allocator_adapter.h>
 #include <EASTL/map.h>
 #include <EASTL/fixed_string.h>
-#include <coreallocator/icoreallocator_interface.h>
+#include <EASTL/allocator.h>
 
 
 #ifdef _MSC_VER

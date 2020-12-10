@@ -49,7 +49,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <EABase/eabase.h>
 #include <EAIO/internal/Config.h>
-#include <coreallocator/icoreallocator_interface.h>
+#include <EASTL/allocator.h>
 #include <new>
 
 
@@ -132,13 +132,13 @@ namespace EA
 
             /// Example usage:
             ///    Widget* pWidget = new(pCoreAllocator) Widget;
-            static void* operator new(size_t n, ICoreAllocator* pAllocator);
-            static void  operator delete(void* p, ICoreAllocator* pAllocator);
+            static void* operator new(size_t n, eastl::allocator* pAllocator);
+            static void  operator delete(void* p, eastl::allocator* pAllocator);
 
             /// Example usage:
             ///    Widget* pWidget = new(pCoreAllocator, "Widget") Widget;
-            static void* operator new(size_t n, ICoreAllocator* pAllocator, const char* pName);
-            static void  operator delete(void* p, ICoreAllocator* pAllocator, const char* pName);
+            static void* operator new(size_t n, eastl::allocator* pAllocator, const char* pName);
+            static void  operator delete(void* p, eastl::allocator* pAllocator, const char* pName);
 
             /// Overloads the operator new signature used by EA_NEW.
             /// Example usage:
@@ -154,7 +154,7 @@ namespace EA
             /// least 8 byte boundaries as well.
             static const uint32_t kOffset = ZONE_OBJECT_MIN_ALIGN;
 
-            static void* DoInternalAllocate(size_t n, ICoreAllocator* pAllocator, 
+            static void* DoInternalAllocate(size_t n, eastl::allocator* pAllocator,
                 const char* pName, unsigned int flags);
             static void  DoInternalDeallocate(void* p);
         };

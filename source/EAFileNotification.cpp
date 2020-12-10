@@ -138,7 +138,7 @@ static void __cdecl ThreadFunction(void* pContext);
 ///////////////////////////////////////////////////////////////////////////////
 // FileChangeNotification
 //
-FileChangeNotification::FileChangeNotification(EA::Allocator::ICoreAllocator* pCoreAllocator)
+FileChangeNotification::FileChangeNotification(eastl::allocator* pCoreAllocator)
   : mbInitialized(false),
     mpCoreAllocator(pCoreAllocator ? pCoreAllocator : IO::GetAllocator()),
     mpFileChangeCallbackContext(NULL),
@@ -330,7 +330,7 @@ bool FileChangeNotification::SetOptionFlags(int nOptionFlags)
 ///////////////////////////////////////////////////////////////////////////////
 // SetAllocator
 //
-void FileChangeNotification::SetAllocator(EA::Allocator::ICoreAllocator* pCoreAllocator)
+void FileChangeNotification::SetAllocator(eastl::allocator* pCoreAllocator)
 {
     mpCoreAllocator = pCoreAllocator;
 }

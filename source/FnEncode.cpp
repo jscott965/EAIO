@@ -318,7 +318,7 @@ namespace EA
         //
         EAIO_API size_t EAIOStrlcpy8(char8_t* pDestination, const char8_t* pSource, size_t nDestCapacity)
         {
-            const size_t n = strlen(pSource);
+            const size_t n = strlen(reinterpret_cast<const char*>(pSource));
 
             if(n < nDestCapacity)
                 memcpy(pDestination, pSource, (n + 1) * sizeof(*pSource));

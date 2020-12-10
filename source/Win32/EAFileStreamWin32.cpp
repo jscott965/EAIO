@@ -154,7 +154,7 @@ void FileStream::SetPath(const char8_t* pPath8)
     using namespace FileStreamLocal;
 
     if((mhFile == kFileHandleInvalid) && pPath8)
-        MultiByteToWideChar(CP_UTF8, 0, pPath8, -1, reinterpret_cast<LPWSTR>(mpPath16), kMaxPathLength); // Convert UTF8 to UTF16.
+        MultiByteToWideChar(CP_UTF8, 0, reinterpret_cast<LPCCH>(pPath8), -1, reinterpret_cast<LPWSTR>(mpPath16), kMaxPathLength); // Convert UTF8 to UTF16.
 }
 
 
@@ -171,7 +171,7 @@ size_t FileStream::GetPath(char8_t* pPath8, size_t nPathLength)
 {
     // Convert from UTF16 to UTF8.
     if(pPath8 && nPathLength)
-        return (size_t)WideCharToMultiByte(CP_UTF8, 0, reinterpret_cast<LPCWCH>(mpPath16), -1, pPath8, (int)nPathLength, NULL, NULL) - 1; // WideCharToMultiByte() - 1 because we don't want to include the terminating null in the returned count. 
+        return (size_t)WideCharToMultiByte(CP_UTF8, 0, reinterpret_cast<LPCWCH>(mpPath16), -1, reinterpret_cast<LPSTR>(pPath8), (int)nPathLength, NULL, NULL) - 1; // WideCharToMultiByte() - 1 because we don't want to include the terminating null in the returned count. 
 
     // In this case the user wants just the length of the return value.
     char8_t pathTemp[kMaxPathLength];

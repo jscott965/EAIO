@@ -38,7 +38,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <EAIO/PathString.h>
 #include <EAIO/EAFileBase.h>
 #include <EAIO/FnEncode.h>
-#include <coreallocator/icoreallocator_interface.h>
+#include <EASTL/allocator.h>
 #include EA_ASSERT_HEADER
 
 
@@ -1350,7 +1350,7 @@ EAIO_API bool GetHasTrailingSeparator(PathString16::const_iterator path, size_t 
 EAIO_API bool GetHasTrailingSeparator(PathString8::const_iterator path, size_t nLength)
 {
     if (nLength == kLengthNull)
-        nLength = strlen(path);
+        nLength = strlen(reinterpret_cast<const char*>(path));
 
     return ((nLength  != 0) && IsDirectorySeparator(*(path + nLength - 1)));
 }
@@ -1395,7 +1395,7 @@ EAIO_API bool EnsureTrailingSeparator(char16_t* pDirName, size_t nMaxPermittedLe
 EAIO_API bool EnsureTrailingSeparator(char8_t* pDirName, size_t nMaxPermittedLength)
 {
     // To consider: should we add to an empty path?
-    const size_t n = strlen(pDirName);
+    const size_t n = strlen(reinterpret_cast<const char*>(pDirName));
 
     if (!EA::IO::Path::GetHasTrailingSeparator(pDirName, (uint32_t)n))
     {
@@ -1430,7 +1430,7 @@ EAIO_API PathString8& StripTrailingSeparator(PathString8& path)
 EAIO_API void StripTrailingSeparator(char8_t* pPath, size_t nLength)
 {
     if (nLength == kLengthNull)
-        nLength = (uint32_t)strlen(pPath);
+        nLength = (uint32_t)strlen(reinterpret_cast<const char*>(pPath));
 
     if (pPath[nLength-1] == EA_FILE_PATH_SEPARATOR_8 || pPath[nLength-1] == EA_FILE_PATH_SEPARATOR_ALT_8)
         pPath[nLength-1] = 0;

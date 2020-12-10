@@ -43,7 +43,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <EABase/eabase.h>
 #include <EAIO/internal/Config.h>
-#include <coreallocator/icoreallocator_interface.h>
+#include <EASTL/allocator.h>
 #include <EAIO/EAFileBase.h>
 #include <EAIO/internal/EAIOEASTLCoreAllocator.h>
 #include <EASTL/list.h>

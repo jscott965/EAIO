@@ -41,7 +41,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <EAIO/FnEncode.h>
 #include <EAIO/FnMatch.h>
 #include <EAIO/EAFileUtil.h>
-#include <coreallocator/icoreallocator_interface.h>
+#include <EASTL/allocator.h>
 #include <string.h>
 #include EA_ASSERT_HEADER
 
@@ -70,21 +70,21 @@ namespace IO
 namespace Internal
 {
     template<class T>
-    T* Allocate(EA::Allocator::ICoreAllocator* pAllocator, const char* pName)
+    T* Allocate(eastl::allocator* pAllocator, const char* pName)
     {
-        T* const pT = (T*)pAllocator->Alloc(sizeof(T), pName, 0, 0);
+        T* const pT = (T*)pAllocator->allocate(sizeof(T), 0, 0);
         if(pT)
             new(pT) T;
         return pT;
     }
 
     template<class T>
-    void Free(EA::Allocator::ICoreAllocator* pAllocator, T* pT)
+    void Free(eastl::allocator* pAllocator, T* pT)
     {
         if(pT)
         {
             pT->~T();
-            pAllocator->Free(pT);
+            pAllocator->deallocate(pT, 0);//Uhhh, we don't have size - Jon
         }
     }
 }

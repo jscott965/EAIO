@@ -7,6 +7,6 @@ This version is slightly modified so it uses EASTL's allocator instead of coreal
 
 # Usage
 
-This project includes a CMake project. It has a dependency on the EASTL and EAAssert target. If you do not include these targets, one will be provided from test/packages/EASTL as a git submodule.
+You can build using the provided CMake project. It depends on EASTL and EAAssert. If you do not include these targets, one will be provided from test/packages/EASTL as a git submodule.
 
-You must have defined EASTL_CORE_ALLOCATOR_ENABLED=1 UTF_USE_EATRACE=0 UTF_USE_EAASSERT=1
+You must have defined UTF_USE_EATRACE=0 UTF_USE_EAASSERT=1

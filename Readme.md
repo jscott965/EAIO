@@ -10,3 +10,5 @@ This version is slightly modified so it uses EASTL's allocator instead of coreal
 You can build using the provided CMake project. It depends on EASTL and EAAssert. If you do not include these targets, one will be provided from test/packages/EASTL as a git submodule.
 
 You must have defined UTF_USE_EATRACE=0 UTF_USE_EAASSERT=1
+
+There are other features defined EAIO/internal/Config.h that have not had ICoreAllocator patched 

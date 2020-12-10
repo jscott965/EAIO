@@ -35,7 +35,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 #include <EAIO/internal/Config.h>
-#include <coreallocator/icoreallocator_interface.h>
+#include <EASTL/allocator.h>
 
 
 #if EAIO_DLL // If this library is built to be a DLL... provide our own default new/delete-based ICoreAllocator.

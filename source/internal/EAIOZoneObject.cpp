@@ -47,12 +47,12 @@ namespace EA
 
         void* EAIOZoneObject::operator new(size_t n)
         {
-            ICoreAllocator* const pAllocator = IO::GetAllocator();
+            eastl::allocator* const pAllocator = IO::GetAllocator();
             return DoInternalAllocate(n, pAllocator, EAIO_ALLOC_PREFIX "EAIOZoneObject", 0);
         }
 
 
-        void* EAIOZoneObject::operator new(size_t n, ICoreAllocator* pAllocator)
+        void* EAIOZoneObject::operator new(size_t n, eastl::allocator* pAllocator)
         {
             if(!pAllocator)
                 pAllocator = IO::GetAllocator();
@@ -60,7 +60,7 @@ namespace EA
         }
 
 
-        void* EAIOZoneObject::operator new(size_t n, ICoreAllocator* pAllocator, const char* pName)
+        void* EAIOZoneObject::operator new(size_t n, eastl::allocator* pAllocator, const char* pName)
         {
             return DoInternalAllocate(n, pAllocator ? pAllocator : IO::GetAllocator(), pName, 0);
         }
@@ -68,13 +68,13 @@ namespace EA
 
         void* EAIOZoneObject::operator new(size_t n, const char* pName, const int flags, int /*debugFlags*/, const char* /*pFile*/, int /*pLine*/)
         {
-            ICoreAllocator* const pCoreAllocator = IO::GetAllocator();
+            eastl::allocator* const pCoreAllocator = IO::GetAllocator();
             return DoInternalAllocate(n, pCoreAllocator, pName, (unsigned int)flags);
         }
 
 
         /// \brief Helper function that allocates memory for operator new()
-        void* EAIOZoneObject::DoInternalAllocate(size_t n, ICoreAllocator* pAllocator, const char* pName, unsigned int flags)
+        void* EAIOZoneObject::DoInternalAllocate(size_t n, eastl::allocator* pAllocator, const char* /*pName*/, unsigned int flags)
         {
             // We stash a pointer to the allocator before the actual object:
             //
@@ -92,11 +92,11 @@ namespace EA
 
             static const size_t kAlignOfT = EA_ALIGN_OF(EAIOZoneObject);
 
-            void* const p = pAllocator->Alloc(n + kOffset, pName, flags, kAlignOfT, kOffset);
+            void* const p = pAllocator->allocate(n + kOffset, kAlignOfT, kOffset, flags);
 
             if(p)
             {
-                ICoreAllocator** const pp = (ICoreAllocator**)p;
+                eastl::allocator** const pp = (eastl::allocator**)p;
                 *pp = pAllocator;
 
                 // Return the start of the memory segment which is dedicated to the object itself.
@@ -116,13 +116,13 @@ namespace EA
         }
 
 
-        void EAIOZoneObject::operator delete(void* p, ICoreAllocator* /*pAllocator*/)
+        void EAIOZoneObject::operator delete(void* p, eastl::allocator* /*pAllocator*/)
         {
             DoInternalDeallocate(p);
         }
 
 
-        void EAIOZoneObject::operator delete(void* p, ICoreAllocator* /*pAllocator*/, const char* /*pName*/)
+        void EAIOZoneObject::operator delete(void* p, eastl::allocator* /*pAllocator*/, const char* /*pName*/)
         {
             DoInternalDeallocate(p);
         }
@@ -151,10 +151,10 @@ namespace EA
                 //           p
                 //
                 // Given 'p', compute true start of memory block
-                ICoreAllocator** const pAllocatedBlockStart = (ICoreAllocator**)((char*)p - kOffset);
+                eastl::allocator** const pAllocatedBlockStart = (eastl::allocator**)((char*)p - kOffset);
 
                 // Start of block contains ICoreAllocator* responsible for that block
-                ICoreAllocator*  const pStashedAllocator    = (ICoreAllocator*)(*pAllocatedBlockStart);
+                eastl::allocator*  const pStashedAllocator    = (eastl::allocator*)(*pAllocatedBlockStart);
 
                 // TODO: check that the pointer is not garbage
                 // Something like this? (http://www.codeproject.com/macro/openvc.asp)
@@ -175,7 +175,7 @@ namespace EA
                 //#endif
 
                 // Free the entire block (including space allocated for the ICoreAllocator*)
-                pStashedAllocator->Free(pAllocatedBlockStart);
+                pStashedAllocator->deallocate(pAllocatedBlockStart, 0);
             }
         }
 
